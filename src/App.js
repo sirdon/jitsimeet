@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+  const jitsiContainerId = "jitsi-container-id";
+  const [jitsi, setJitsi] = React.useState({});
+  const loadJitsiScript = () => {
+    let resolveLoadJitsiScriptPromise = null;
 
-export default App;
+    const loadJitsiScriptPromise = new Promise((resolve) => {
+      resolveLoadJitsiScriptPromise = resolve;
+    });
+
+    const script = document.createElement("script");
+    script.src = "reactJiti\jitiapp\src\components\jitsiApi.js";
+    script.async = true;
+    script.onload = resolveLoadJitsiScriptPromise
+    document.body.appendChild(script);
+
+    return loadJitsiScriptPromise;
+  };
+  const navigate = (link) =>{
+    window.history.go('/')
+  }
+  const initialiseJitsi = async () => {
+    if (!window.JitsiMeetExternalAPI) {
+      await loadJitsiScript();
+    }
+
+    const _jitsi = new window.JitsiMeetExternalAPI("meet.jit.si", {
+      parentNode: document.getElementById(jitsiContainerId),
+    });
+
+    setJitsi(_jitsi)
+    
+  };
+
+  React.useEffect(() => {
+    initialiseJitsi();
+    // jitsi.addEventListener('videoConferenceLeft', () => {
+    //   navigate('/');
+    // });
+    return () => jitsi?.dispose?.();
+  }, []);
+  
+  return <div id={jitsiContainerId} style={{ height: 720, width: "100%" }} />;
+};
+
+export default App; 
