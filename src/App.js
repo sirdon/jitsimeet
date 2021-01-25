@@ -9,7 +9,7 @@ const App = () => {
     const loadJitsiScriptPromise = new Promise((resolve) => {
       resolveLoadJitsiScriptPromise = resolve;
     });
-
+    console.log("hello");
     const script = document.createElement("script");
     script.src = "reactJiti\jitiapp\src\components\jitsiApi.js";
     script.async = true;
