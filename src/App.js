@@ -1,4 +1,5 @@
 import React from "react";
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 
 const App = () => {
   const jitsiContainerId = "jitsi-container-id";
@@ -42,7 +43,9 @@ const App = () => {
     return () => jitsi?.dispose?.();
   }, []);
   
-  return <div id={jitsiContainerId} style={{ height: 720, width: "100%" }} />;
+  return <div id={jitsiContainerId} style={{ height: 720, width: "100%" }} >
+    <AmplifySignOut />
+  </div>;
 };
 
-export default App; 
+export default withAuthenticator(App);
